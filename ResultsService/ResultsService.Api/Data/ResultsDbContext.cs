@@ -7,7 +7,7 @@ namespace ResultsService.Api.Data
     {
         public ResultsDbContext(DbContextOptions<ResultsDbContext> options) : base(options) { }
         public DbSet<ParseFileResult> Values => Set<ParseFileResult>();
-        public DbSet<Result> Results => base.Set<Result>();
+        public DbSet<Result> Results => Set<Result>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
