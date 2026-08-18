@@ -1,0 +1,138 @@
+<h1>Результаты</h1>
+
+@if (loading()) {
+<p>Загрузка результатов...</p>
+}
+
+@if (error()) {
+<p>{{ error() }}</p>
+}
+
+@if (!loading() && !error() && results().length === 0) {
+<p>Результатов пока нет.</p>
+}
+
+@if (!loading() && results().length > 0) {
+<section class="filters">
+
+  <h2>Фильтры</h2>
+
+  <div class="filter-row">
+
+    <label>
+      Файл
+      <input type="text"
+             [value]="filter().fileName ?? ''"
+             (input)="updateFilter('fileName', $any($event.target).value)"
+             placeholder="Имя файла" />
+    </label>
+
+  </div>
+
+  <div class="filter-row">
+
+    <label>
+      Дата запуска от
+      <input type="datetime-local"
+             [value]="filter().startDateFrom ?? ''"
+             (input)="updateFilter('startDateFrom', $any($event.target).value)" />
+    </label>
+
+    <label>
+      Дата запуска до
+      <input type="datetime-local"
+             [value]="filter().startDateTo ?? ''"
+             (input)="updateFilter('startDateTo', $any($event.target).value)" />
+    </label>
+
+  </div>
+
+  <div class="filter-row">
+
+    <label>
+      Среднее значение от
+      <input type="number"
+             [value]="filter().averageValueFrom ?? ''"
+             (input)="updateNumberFilter('averageValueFrom', $any($event.target).value)" />
+    </label>
+
+    <label>
+      Среднее значение до
+      <input type="number"
+             [value]="filter().averageValueTo ?? ''"
+             (input)="updateNumberFilter('averageValueTo', $any($event.target).value)" />
+    </label>
+
+  </div>
+
+  <div class="filter-row">
+
+    <label>
+      Среднее время от
+      <input type="number"
+             [value]="filter().averageExecutionTimeFrom ?? ''"
+             (input)="updateNumberFilter('averageExecutionTimeFrom', $any($event.target).value)" />
+    </label>
+
+    <label>
+      Среднее время до
+      <input type="number"
+             [value]="filter().averageExecutionTimeTo ?? ''"
+             (input)="updateNumberFilter('averageExecutionTimeTo', $any($event.target).value)" />
+    </label>
+
+  </div>
+
+  <div class="filter-buttons">
+    <button type="button"
+            (click)="loadResults()">
+      Найти
+    </button>
+
+    <button type="button"
+            (click)="resetFilter()">
+      Сбросить
+    </button>
+  </div>
+
+</section>
+
+<table>
+  <thead>
+    <tr>
+      <th>Файл</th>
+      <th>Дата запуска</th>
+      <th>Интервал</th>
+      <th>Среднее время</th>
+      <th>Среднее значение</th>
+      <th>Медиана</th>
+      <th>Минимум</th>
+      <th>Максимум</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (result of results(); track result.fileName + result.startDate) {
+    <tr>
+      <td>{{ result.fileName }}</td>
+
+      <td>
+        {{ result.startDate | date:'dd.MM.yyyy HH:mm:ss' }}
+      </td>
+
+      <td>{{ result.timeDelta }}</td>
+
+      <td>{{ result.averageExecutionTime }}</td>
+
+      <td>{{ result.averageValue }}</td>
+
+      <td>{{ result.medianValue }}</td>
+
+      <td>{{ result.minValue }}</td>
+
+      <td>{{ result.maxValue }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
+}

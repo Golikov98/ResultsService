@@ -1,0 +1,93 @@
+<div class="import-container">
+
+  <h2>Импорт CSV-файла</h2>
+
+  <div class="file-selector">
+    <input type="file"
+           accept=".csv"
+           (change)="onFileSelected($event)" />
+
+    @if (selectedFile) {
+    <p>
+      Выбран файл:
+      <strong>{{ selectedFile.name }}</strong>
+    </p>
+    }
+  </div>
+
+  <button type="button"
+          (click)="importFile()"
+          [disabled]="!selectedFile || isLoading">
+    @if (isLoading) {
+    Обработка...
+    } @else {
+    Загрузить файл
+    }
+  </button>
+
+  @if (errorMessage) {
+  <div class="error">
+    {{ errorMessage }}
+  </div>
+  }
+
+  @if (result) {
+  <div class="result">
+
+    <h3>Файл успешно обработан</h3>
+
+    <p>
+      <strong>Имя файла:</strong>
+      {{ result.fileName }}
+    </p>
+
+    <p>
+      <strong>Количество строк:</strong>
+      {{ result.rowsCount }}
+    </p>
+
+    <h3>Результаты</h3>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>Начальная дата</td>
+          <td>{{ result.result.startDate | date:'dd.MM.yyyy HH:mm:ss' }}</td>
+        </tr>
+
+        <tr>
+          <td>Временной интервал</td>
+          <td>{{ result.result.timeDelta }}</td>
+        </tr>
+
+        <tr>
+          <td>Среднее время выполнения</td>
+          <td>{{ result.result.averageExecutionTime }}</td>
+        </tr>
+
+        <tr>
+          <td>Среднее значение</td>
+          <td>{{ result.result.averageValue }}</td>
+        </tr>
+
+        <tr>
+          <td>Медиана</td>
+          <td>{{ result.result.medianValue }}</td>
+        </tr>
+
+        <tr>
+          <td>Максимальное значение</td>
+          <td>{{ result.result.maxValue }}</td>
+        </tr>
+
+        <tr>
+          <td>Минимальное значение</td>
+          <td>{{ result.result.minValue }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  }
+
+</div>

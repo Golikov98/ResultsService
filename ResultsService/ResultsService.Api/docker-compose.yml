@@ -14,5 +14,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
 
+  api:
+    build:
+      context: ..
+      dockerfile: ResultsService.Api/Dockerfile
+
+    container_name: results-api
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=ResultsDb;Username=postgres;Password=postgres"
+
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
+    depends_on:
+      - postgres
+
 volumes:
   postgres_data:
