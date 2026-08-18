@@ -24,11 +24,10 @@ namespace ResultsService.Api.Controllers
         /// <response code="200">Файл успешно обработан и сохранён.</response>
         /// <response code="400">Файл не передан, пуст или имеет некорректный формат.</response>
         [HttpPost("import")]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(ImportFileResponseDto),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ImportFileResponseDto>> Import(
-            [FromForm] IFormFile file,
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<ImportFileResponseDto>> Import(IFormFile file, CancellationToken cancellationToken)
         {
             if (file == null)
             {
