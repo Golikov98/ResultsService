@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ResultsApiService } from '../../services/results-api.service';
@@ -20,6 +20,8 @@ export class ImportComponent {
 
   errorMessage = '';
   isLoading = false;
+
+  importCompleted = output<void>();
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -43,6 +45,8 @@ export class ImportComponent {
       next: response => {
         this.result = response;
         this.isLoading = false;
+
+        this.importCompleted.emit();
       },
       error: error => {
         this.isLoading = false;

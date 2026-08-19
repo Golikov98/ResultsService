@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { ResultsApiService } from '../../services/results-api.service';
 import { ResultDto } from '../../models/result.model';
 import { ResultFilterDto } from '../../models/result-filter.model';
+import { ValueDto } from '../../models/value.model';
 
 @Component({
   selector: 'app-results',
@@ -19,6 +20,11 @@ export class Results implements OnInit {
   readonly loading = signal(false);
   readonly error = signal('');
   readonly filter = signal<ResultFilterDto>({});
+
+  readonly selectedFileName = signal<string | null>(null);
+  readonly values = signal<ValueDto[]>([]);
+  readonly valuesLoading = signal(false);
+  readonly valuesError = signal('');
 
   ngOnInit(): void {
     this.loadResults();
@@ -84,5 +90,29 @@ export class Results implements OnInit {
   resetFilter(): void {
     this.filter.set({});
     this.loadResults();
+  }
+
+  showValues(fileName: string): void {
+    this.selectedFileName.set(fileName);
+    this.values.set([]);
+    this.valuesError.set('');
+    this.valuesLoading.set(true);
+
+    this.resultsApi.getLatestValues(fileName).subscribe({
+      next: (values) => {
+        this.values.set(values);
+        this.valuesLoading.set(false);
+      },
+
+      error: (error) => {
+        console.error('Ошибка загрузки значений:', error);
+
+        this.valuesError.set(
+          'Не удалось загрузить значения для выбранного файла.'
+        );
+
+        this.valuesLoading.set(false);
+      }
+    });
   }
 }

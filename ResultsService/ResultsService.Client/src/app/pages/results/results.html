@@ -108,6 +108,7 @@
       <th>Медиана</th>
       <th>Минимум</th>
       <th>Максимум</th>
+      <th>Значения</th>
     </tr>
   </thead>
 
@@ -131,8 +132,70 @@
       <td>{{ result.minValue }}</td>
 
       <td>{{ result.maxValue }}</td>
+
+      <td>
+        <button type="button"
+                (click)="showValues(result.fileName)">
+          Последние значения
+        </button>
+      </td>
     </tr>
     }
   </tbody>
 </table>
+
+@if (selectedFileName()) {
+<section class="values-section">
+
+  <h2>
+    Последние значения:
+    {{ selectedFileName() }}
+  </h2>
+
+  @if (valuesLoading()) {
+  <p>Загрузка значений...</p>
+  }
+
+  @if (valuesError()) {
+  <p class="error">
+    {{ valuesError() }}
+  </p>
+  }
+
+  @if (!valuesLoading() && !valuesError()) {
+  @if (values().length > 0) {
+
+  <table>
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Время выполнения</th>
+        <th>Значение</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (value of values(); track $index) {
+      <tr>
+        <td>
+          {{ value.date | date:'dd.MM.yyyy HH:mm:ss' }}
+        </td>
+        <td>
+          {{ value.executionTime }}
+        </td>
+        <td>
+          {{ value.value }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  } @else {
+  <p>Значения отсутствуют.</p>
+  }
+  }
+
+</section>
+}
 }
