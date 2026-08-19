@@ -109,6 +109,7 @@ Frontend:
 
 # Структура проекта
 
+```text
 ResultsService/
 │
 ├── ResultsService.Api/
@@ -169,7 +170,7 @@ ResultsService/
 │
 ├── docker-compose.yml
 └── README.md
-
+```
 ---
 
 # Функциональность
